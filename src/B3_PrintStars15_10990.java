@@ -1,19 +1,21 @@
-package baekjoon;
+
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-public class B2_PrintStars21_10996 {
+public class B3_PrintStars15_10990 {
 	public static void main(String[] args) throws NumberFormatException, IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringBuilder sb = new StringBuilder();
 		int N = Integer.parseInt(br.readLine());
 		
-		for(int i = 1; i <= 2*N; i++) {
-			sb.append(i % 2 == 1 ? "" : " ");
-			for(int j = 0; j < (i % 2 == 1 ? 2*((N+1)/2)-1 : 2*(N/2)-1); j++) {
-				sb.append(j % 2 == 0 ? "*" : " ");
+		for(int i = 1; i <= N; i++) {
+			for(int j = 0; j < N-i; j++) {
+				sb.append(" ");
+			}
+			for(int j = 0; j < 2*i-1; j++) {
+				sb.append((j == 0 || j == 2*i-2) ? "*" : " ");
 			}
 			sb.append("\n");
 		}
