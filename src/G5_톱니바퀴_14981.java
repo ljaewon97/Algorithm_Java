@@ -4,7 +4,7 @@ import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.StringTokenizer;
 
-public class G5_Gears_14981 {
+public class G5_톱니바퀴_14981 {
 	static int[][] gears = new int[4][8];
 	static int[] spins = new int[4];
 	static int score = 0;

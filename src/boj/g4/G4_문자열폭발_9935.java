@@ -3,67 +3,56 @@ package boj.g4;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Stack;
 
 public class G4_문자열폭발_9935 {
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringBuilder sb = new StringBuilder();
+		Stack<Character> stack = new Stack<>();
 		char[] str = br.readLine().toCharArray();
 		char[] exp = br.readLine().toCharArray();
-		int[] v = new int[str.length];
-		int i = 0, j = 0;
+		int strlen = str.length;
+		int explen = exp.length;
+		char lastChar = exp[explen - 1];
 		
-		while(i < str.length && i >= 0) {
-			if(v[i] == 1) {
-				i++;
-				continue;
-			}
+		for(int i = 0; i < strlen; i++) {
+			stack.push(str[i]);
 			
-			if(str[i] != exp[j]) {
-				j = 0;
-			}
-			
-			if(str[i] == exp[j]) {
-				j++;
-			}
-			
-			i++;
-			
-			if(j == exp.length) {
-				int cnt = j;
-				while(cnt > 0) {
-					i--;
-					if(v[i] == 1) {
-						continue;
-					}
-					else {
-						cnt--;
-						v[i] = 1;
+			if(stack.peek() == lastChar && stack.size() >= explen) {
+				char[] temp = new char[explen];
+				
+				for(int j = 0; j < explen; j++) {
+					temp[explen-1-j] = stack.pop();
+				}
+				
+				boolean same = true;
+				for(int j = 0; j < explen; j++) {
+					if(temp[j] != exp[j]) {
+						same = false;
+						break;
 					}
 				}
 				
-				for(int k = 0; k < exp.length - 1; k++) {
-					if(i == 0) {
-						break;
-					}
-					i--;
+				if(same) {
+					continue;
 				}
-				j = 0;
+				else {
+					for(int j = 0; j < explen; j++) {
+						stack.push(temp[j]);
+					}
+				}
 			}
 		}
 		
-		for(int k = 0; k < str.length; k++) {
-			if(v[k] == 0) {
-				sb.append(str[k]);
-			}
-		}
-		
-		if(sb.length() == 0) {
+		if(stack.isEmpty()) {
 			System.out.println("FRULA");
 		}
 		else {
-			System.out.println(sb);
-		}
-				
+			while(!stack.isEmpty()) {
+				sb.append(stack.pop());
+			}
+			System.out.println(sb.reverse());
+		}		
 	}
 }
