@@ -1,7 +1,5 @@
 package boj.p4;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -92,12 +90,12 @@ public class P4_05467_Type_Printer {
 			}
 		}
 		
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		Reader in = new Reader();
 		
 		Trie trie = new Trie();
-		int N = Integer.parseInt(br.readLine());
+		int N = in.nextInt();
 		for(int i = 0; i < N; i++) {
-			trie.insert(br.readLine());
+			trie.insert(in.next());
 		}
 		
 		trie.print(trie.root);
@@ -105,4 +103,47 @@ public class P4_05467_Type_Printer {
 		sb.insert(0, sb.length() / 2 + "\n");
 		System.out.println(sb);
 	}
+}
+
+class Reader {
+	final int SIZE = 1 << 13;
+	byte[] buffer = new byte[SIZE];
+	int idx, size;
+	
+	boolean isAlpha(byte b) {
+		return (64 < b && b < 91) || (96 < b && b < 123);
+	}
+	
+	byte read() throws Exception {
+		if(idx == size) {
+			size = System.in.read(buffer, idx = 0, SIZE);
+			if (size < 0) {
+				buffer[0] = -1;
+			}
+		}
+		return buffer[idx++];
+	}
+	
+	String next() throws Exception {
+		byte[] temp = new byte[30];
+		int idx = 0;
+		byte b;
+		while((b = read()) <= 32);
+		do temp[idx++] = b;
+		while (isAlpha(b = read()));
+		return new String(temp, 0, idx);
+	}
+	
+	int nextInt() throws Exception {
+        int n = 0;
+        byte b;
+        while ((b = read()) <= 32);
+        do n = (n << 3) + (n << 1) + (b & 15);
+        while (isNumber(b = read()));
+        return n;
+    }
+	
+    boolean isNumber(byte b) {
+        return 47 < b && b < 58;
+    }
 }
