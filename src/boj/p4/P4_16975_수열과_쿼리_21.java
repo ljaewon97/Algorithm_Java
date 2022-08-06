@@ -2,19 +2,22 @@ package boj.p4;
 
 public class P4_16975_수열과_쿼리_21 {
 	static Reader in = new Reader();
-	static long[] tree, lazy;
+	static long[] arr, tree, lazy;
 	static int N, M;
 	
 	public static void main(String[] args) throws Exception {
 		StringBuilder sb = new StringBuilder();
 		
 		N = in.nextInt();
-		tree = new long[3*N];
-		lazy = new long[3*N];
+		arr = new long[N];
+		tree = new long[8*N+1];
+		lazy = new long[8*N+1];
 		
-		for(int i = 1; i <= N; i++) {
-			tree[i] = in.nextLong();
+		for(int i = 0; i < N; i++) {
+			arr[i] = in.nextLong();
 		}
+		
+		buildTree(1, 0, N-1);
 		
 		M = in.nextInt();
 		for(int p = 0; p < M; p++) {
@@ -28,9 +31,25 @@ public class P4_16975_수열과_쿼리_21 {
 				update(i, j, k, 1, 0, N-1);
 			}
 			else {
+				int x = in.nextInt() - 1;
 				
+				sb.append(query(x, 1, 0, N-1)).append("\n");
 			}
 		}
+		
+		System.out.println(sb);
+	}
+	
+	static long buildTree(int node, int nodeLeft, int nodeRight) {
+		if(nodeLeft == nodeRight) {
+			return tree[node] = arr[nodeLeft];
+		}
+		
+		int mid = (nodeLeft + nodeRight) / 2;
+		long leftValue = buildTree(node*2, nodeLeft, mid);
+		long rightValue = buildTree(node*2+1, mid+1, nodeRight);
+		
+		return tree[node] = leftValue + rightValue;
 	}
 	
 	static long query(int idx, int node, int nodeLeft, int nodeRight) {
@@ -45,10 +64,8 @@ public class P4_16975_수열과_쿼리_21 {
 		}
 		
 		int mid = (nodeLeft + nodeRight) / 2;
-		long leftValue = query(idx, node*2, nodeLeft, mid);
-		long rightValue = query(idx, node*2+1, mid+1, nodeRight);
 		
-		return leftValue + rightValue;
+		return query(idx, node*2, nodeLeft, mid) + query(idx, node*2+1, mid+1, nodeRight);
 	}
 	
 	static long update(int left, int right, long newValue, int node, int nodeLeft, int nodeRight) {
