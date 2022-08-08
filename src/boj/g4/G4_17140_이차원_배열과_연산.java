@@ -42,10 +42,10 @@ public class G4_17140_이차원_배열과_연산 {
 			}
 			
 			if(R >= C) {
-				operR();
+				operR(); // R 연산
 			}
 			else {
-				operC();
+				operC(); // C 연산
 			}
 
 			ans++;
@@ -58,6 +58,7 @@ public class G4_17140_이차원_배열과_연산 {
 		for(int r = 0; r < R; r++) {
 			Map<Integer, Integer> counter = new HashMap<>();
 			
+			// 개수 세기, 0이면 건너 뜀
 			for(int c = 0; c < C; c++) {
 				if(arr[r][c] == 0) {
 					continue;
@@ -71,6 +72,7 @@ public class G4_17140_이차원_배열과_연산 {
 				}
 			}
 			
+			// 숫자가 몇 개 있는지 배열로
 			int[][] temp = new int[counter.size()][2];
 			int idx = 0;
 			
@@ -80,8 +82,10 @@ public class G4_17140_이차원_배열과_연산 {
 				idx++;
 			}
 			
+			// 수의 등장 횟수가 커지는 순, 수가 커지는 순으로 정렬
 			Arrays.sort(temp, (o1, o2) -> o1[1] == o2[1] ? o1[0] - o2[0] : o1[1] - o2[1]);
 			
+			// 값을 arr에 대입하고 뒷 부분은 모두 0으로
 			int len = temp.length;
 			for(int c = 0; c < len; c++) {
 				arr[r][2*c] = temp[c][0];
@@ -95,6 +99,7 @@ public class G4_17140_이차원_배열과_연산 {
 			if(len*2 > max) max = len*2;
 		}
 		
+		// 가장 긴 행의 길이 C에 대입 -> 다음 R 연산때 C까지 탐색 
 		C = max;
 	}
 	
