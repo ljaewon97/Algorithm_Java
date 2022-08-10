@@ -1,7 +1,5 @@
 package boj.p3;
 
-import java.util.Arrays;
-
 public class P3_13537_수열과_쿼리_1 {
 	static Reader in = new Reader();
 	static int[] arr, tree;
