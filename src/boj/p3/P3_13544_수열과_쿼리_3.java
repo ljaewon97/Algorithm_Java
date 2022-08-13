@@ -1,6 +1,6 @@
 package boj.p3;
 
-public class P3_13537_수열과_쿼리_1 {
+public class P3_13544_수열과_쿼리_3 {
 	static Reader in = new Reader();
 	static int[] arr;
 	static int[][] tree;
@@ -21,13 +21,16 @@ public class P3_13537_수열과_쿼리_1 {
 		buildTree(1, 0, N-1);
 		
 		M = in.nextInt();
+		int last_ans = 0;
 		
 		for(int q = 0; q < M; q++) {
-			int i = in.nextInt() - 1;
-			int j = in.nextInt() - 1;
-			int k = in.nextInt();
+			int i = in.nextInt() ^ last_ans;
+			int j = in.nextInt() ^ last_ans;
+			int k = in.nextInt() ^ last_ans;
 			
-			sb.append(query(i, j, k, 1, 0, N-1)).append("\n");
+			last_ans = query(i-1, j-1, k, 1, 0, N-1);
+			
+			sb.append(last_ans).append("\n");
 		}
 		
 		System.out.println(sb);
