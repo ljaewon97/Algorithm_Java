@@ -1,4 +1,4 @@
-package boj;
+package boj.p2;
 
 public class P2_07469_K번째_수 {
 	static Reader in = new Reader();
