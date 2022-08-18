@@ -1,22 +1,23 @@
 package boj.g4;
 
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 public class G4_09663_N_Queen {
 	static int N, ans = 0;
 	static int[] result;
 	static int len = 0;
 	
-	public static void main(String[] args) {
-		Scanner sc = new Scanner(System.in);
-		N = sc.nextInt();
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		N = Integer.parseInt(br.readLine());
 	
 		result = new int[N];
 		
 		recur(0);
 		
 		System.out.println(ans);
-		sc.close();
 	}
 	
 	static void recur(int nth) {

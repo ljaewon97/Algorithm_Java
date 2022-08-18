@@ -14,9 +14,8 @@ public class G4_01987_알파벳 {
 	
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st;
+		StringTokenizer st = new StringTokenizer(br.readLine());
 		
-		st = new StringTokenizer(br.readLine());
 		R = Integer.parseInt(st.nextToken());
 		C = Integer.parseInt(st.nextToken());
 		
@@ -27,8 +26,7 @@ public class G4_01987_알파벳 {
 			map[i] = br.readLine().toCharArray();
 		}
 		
-		int bit = 1 << (map[0][0] - 'A');
-		dfs(0, 0, 1, bit);
+		dfs(0, 0, 1, 1 << (map[0][0] - 'A'));
 		
 		System.out.println(ans);
 	}
@@ -37,9 +35,7 @@ public class G4_01987_알파벳 {
 		if(visited[r][c] == v) return;
 		visited[r][c] = v;
 		
-		if(d > ans) {
-			ans = d;
-		}
+		ans = Math.max(ans, d);
 		
 		for(int i = 0; i < 4; i++) {
 			int nr = r + dr[i];
@@ -47,9 +43,8 @@ public class G4_01987_알파벳 {
 			
 			if(isIn(nr, nc)) {
 				int bit = 1 << (map[nr][nc] - 'A');
-				if((~v & bit) == bit) {
-					int nv = v | bit;
-					dfs(nr, nc, d+1, nv);
+				if((v & bit) == 0) {
+					dfs(nr, nc, d+1, v | bit);
 				}
 			}
 		}
