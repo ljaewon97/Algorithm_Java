@@ -3,8 +3,7 @@ package boj.g3;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
@@ -14,7 +13,7 @@ public class G3_17135_캐슬_디펜스 {
 	static int[][] map;
 	static int[][] visited;
 	static int[] loc;
-	static int N, M, D, enemy, enemyCnt, cnt, ans;
+	static int N, M, D, cnt, ans;
 	static int[] dr = {0,-1,0};
 	static int[] dc = {-1,0,1};
 	
@@ -34,7 +33,6 @@ public class G3_17135_캐슬_디펜스 {
 			st = new StringTokenizer(br.readLine());
 			for(int j = 0; j < M; j++) {
 				map[i][j] = Integer.parseInt(st.nextToken());
-				if(map[i][j] == 1) enemyCnt++;
 			}
 		}
 		
@@ -44,18 +42,16 @@ public class G3_17135_캐슬_디펜스 {
 	}
 	
 	static void defense() {
-		int[][] arr = new int[N][M];
-		enemy = enemyCnt;
+		int[][] arr = new int[N][];
 		cnt = 0;
 		
 		for(int i = 0; i < N; i++) {
-			for(int j = 0; j < M; j++) {
-				arr[i][j] = map[i][j];
-			}
+			arr[i] = Arrays.copyOf(map[i], M);
 		}
 		
-		while(enemy > 0) {
-			visited = new int[N+1][M];
+		visited = new int[N+1][M];
+		for(int r = N-1; r >= 0; r--) {
+			
 			for(int i = 0; i < N+1; i++) {
 				for(int j = 0; j < M; j++) {
 					visited[i][j] = -1;
@@ -65,55 +61,30 @@ public class G3_17135_캐슬_디펜스 {
 			List<int[]> pend = new LinkedList<>();
 			
 			for(int i = 0; i < 3; i++) {
-				int[] killed = shoot(arr, N, loc[i], i);
+				int[] killed = shoot(arr, r+1, loc[i], i+3*(N-1-r));
 			
 				if(killed == null) continue;
-				
-				int r = killed[0];
-				int c = killed[1];
-				
-				if(arr[r][c] == 1) {
-					pend.add(killed);
-				}
+
+				pend.add(killed);
 			}
 			
 			for(int[] p: pend) {
 				if(arr[p[0]][p[1]] == 1) {
 					arr[p[0]][p[1]] = 0;
-					enemy--;
 					cnt++;
 				}
 			}
 			
-			arr = move(arr);
+			for(int c = 0; c < M; c++) {
+				arr[r][c] = 0;
+			}
 		}
 		
 		ans = Math.max(ans, cnt);
 	}
 	
-	static int[][] move(int[][] arr) {
-		for(int i = 0; i < M; i++) {
-			if(arr[N-1][i] == 1) {
-				enemy--;
-			}
-		}
-		
-		for(int i = N-1; i > 0; i--) {
-			for(int j = 0; j < M; j++) {
-				arr[i][j] = arr[i-1][j];
-			}
-		}
-		
-		for(int i = 0; i < M; i++) {
-			arr[0][i] = 0;
-		}
-		
-		return arr;
-	}
-	
 	static int[] shoot(int[][] arr, int sr, int sc, int code) {
 		Deque<int[]> deque = new LinkedList<>();
-		List<int[]> killed = new ArrayList<>();
 		deque.add(new int[] {sr, sc, 0});
 		visited[sr][sc] = code;
 		
@@ -135,16 +106,13 @@ public class G3_17135_캐슬_디펜스 {
 						visited[nr][nc] = code;
 					}
 					else {
-						killed.add(new int[] {nr, nc, dist+1});
+						return new int[] {nr, nc};
 					}
 				}
 			}
 		}
 		
-		Collections.sort(killed, (o1, o2) -> o1[2] == o2[2] ? o1[1] - o2[1] : o1[2] - o2[2]);
-		
-		if(killed.isEmpty()) return null;
-		else return killed.get(0);
+		return null;
 	}
 	
 	static void comb(int nth, int start) {
