@@ -31,7 +31,7 @@ public class G5_13023_ABCDE {
 		for(int i = 0; i < N; i++) {
 			if(!visited[i]) {
 				visited[i] = true;
-				dfs(i, 0);
+				dfs(i, 0); // i에서 시작하여 길이가 4인 정점 있는지 확인
 				visited[i] = false;
 			}
 		}
@@ -50,7 +50,7 @@ public class G5_13023_ABCDE {
 			if(!visited[next]) {
 				visited[next] = true;
 				dfs(next, dist+1);
-				visited[next] = false;
+				visited[next] = false; // 모든 경로를 확인해야 하므로 방문기록 제거
 			}
 		}
 	}

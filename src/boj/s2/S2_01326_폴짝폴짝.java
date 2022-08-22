@@ -50,6 +50,7 @@ public class S2_01326_폴짝폴짝 {
 				return;
 			}
 			
+			// 양의 방향 이동
 			int step = 1;
 			while(true) {
 				int nx = x + stone[x] * step;
@@ -64,6 +65,7 @@ public class S2_01326_폴짝폴짝 {
 				step++;
 			}
 			
+			// 음의 방향 이동
 			step = 1;
 			while(true) {
 				int nx = x - stone[x] * step;
