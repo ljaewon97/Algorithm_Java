@@ -3,36 +3,108 @@ package boj.r3;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class R3_18789_814_2 {
 	static int[] dr = {-1,1,0,0,-1,-1,1,1};
 	static int[] dc = {0,0,-1,1,-1,1,-1,1};
+	static boolean[][] visited;
 	
 	public static void main(String[] args) throws IOException {
-		String str = "10203344536473\r\n" + 
-				"01020102010201\r\n" + 
-				"00000000008390\r\n" + 
-				"00000000000400\r\n" + 
-				"00000000000000\r\n" + 
-				"55600000000089\r\n" + 
-				"78900066000089\r\n" + 
-				"00000789000077";
+		StringBuilder sb = new StringBuilder();
 		
-		BufferedReader br = new BufferedReader(new StringReader(str));
+//		String str = "00000000000000\r\n" + 
+//				"00000000000000\r\n" + 
+//				"00000000000000\r\n" + 
+//				"00000000000000\r\n" + 
+//				"00000000000000\r\n" + 
+//				"00000000000000\r\n" + 
+//				"00000000000000\r\n" + 
+//				"00000000000000";
+//		
+//		BufferedReader br = new BufferedReader(new StringReader(str));
+//		
+//		int[][] arr = new int[8][14];
+//		
+//		for(int i = 0; i < 8; i++) {
+//			String line = br.readLine();
+//			
+//			for(int j = 0; j < 14; j++) {
+//				arr[i][j] = line.charAt(j) - '0';
+//			}
+//		}
+		
+		SecureRandom rd = new SecureRandom();
 		
 		int[][] arr = new int[8][14];
 		
 		for(int i = 0; i < 8; i++) {
-			String line = br.readLine();
-			
 			for(int j = 0; j < 14; j++) {
-				arr[i][j] = line.charAt(j) - '0';
+				arr[i][j] = rd.nextInt(10);
 			}
 		}
 		
 		System.out.println(grade(arr));
+		
+		
+		double k = 1;
+		double T = 100000;
+		double fallingRate = 0.99995;
+		int iter = 1;
+		
+		while(true) {
+			int E1 = grade(arr);
+			
+//			int randR = -1, randC = -1;
+//			
+//			while(true) {
+//				randR = rd.nextInt(8);
+//				randC = rd.nextInt(14);
+//				
+//				if(arr[randR][randC] == 0) break;
+//			}
+			
+			int randR = rd.nextInt(8);
+			int randC = rd.nextInt(14);
+			int randV = rd.nextInt(10);
+			
+			int[][] narr = new int[8][14];
+			
+			for(int r = 0; r < 8; r++) {
+				for(int c = 0; c < 14; c++) {
+					narr[r][c] = arr[r][c];
+				}
+			}
+			
+			narr[randR][randC] = randV;
+			
+			int E2 = grade(narr);
+			
+			System.out.printf("%d %d %d\n", iter, E1, E2);
+			
+			double p = Math.exp((E1-E2)/(k*T));
+			
+			if(p > rd.nextDouble()) arr = narr;
+			
+			T *= fallingRate;
+			iter++;
+			rd.setSeed(E2);
+			
+			if(E2 > 500 || T < k) {
+				for(int i = 0; i < 8; i++) {
+					for(int j = 0; j < 14; j++) {
+						sb.append(narr[i][j]);
+					}
+					sb.append("\n");
+				}
+				
+				System.out.println(sb);
+				break;
+			}
+		}
 	}
 	
 	// 채점 함수
@@ -91,3 +163,19 @@ public class R3_18789_814_2 {
 		return 0 <= r && r < 8 && 0 <= c && c < 14;
 	}
 }
+
+
+/*
+
+505
+
+32632694182951
+27770657263874
+13343850249252
+29614781921041
+03641801057803
+35607633748298
+96291849594537
+99891829371529
+
+*/
