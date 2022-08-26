@@ -8,8 +8,10 @@ public class G3_01600_말이_되고픈_원숭이 {
 	static int[][] map;
 	static int[][] visited;
 	static int K, W, H, ans = -1;
-	static int[] dr = {-1,1,0,0,-1,-2,-2,-1,1,2,2,1};
-	static int[] dc = {0,0,-1,1,-2,-1,1,2,2,1,-1,-2};
+	static int[] mdr = {-1,1,0,0};
+	static int[] mdc = {0,0,-1,1};
+	static int[] hdr = {-1,-2,-2,-1,1,2,2,1};
+	static int[] hdc = {-2,-1,1,2,2,1,-1,-2};
 	
 	public static void main(String[] args) throws Exception {
 		K = in.nextInt();
@@ -49,8 +51,8 @@ public class G3_01600_말이_되고픈_원숭이 {
 			}
 			
 			for(int i = 0; i < 4; i++) {
-				int nr = r + dr[i];
-				int nc = c + dc[i];
+				int nr = r + mdr[i];
+				int nc = c + mdc[i];
 				
 				if(isIn(nr, nc) && map[nr][nc] != 1 && (bit & visited[nr][nc]) == 0) {
 					visited[nr][nc] |= bit;
@@ -60,10 +62,10 @@ public class G3_01600_말이_되고픈_원숭이 {
 			
 			if(jump < K) {
 				for(int i = 0; i < 8; i++) {
-					int nr = r + dr[4+i];
-					int nc = c + dc[4+i];
+					int nr = r + hdr[i];
+					int nc = c + hdc[i];
 					
-					if(isIn(nr, nc) && map[nr][nc] != 1 && (bit & visited[nr][nc]) == 0 && ((bit << 1) & visited[nr][nc]) == 0) {
+					if(isIn(nr, nc) && map[nr][nc] != 1 && ((bit << 1) & visited[nr][nc]) == 0) {
 						visited[nr][nc] |= bit << 1;
 						queue.add(new int[] {nr, nc, jump+1, d+1});
 					}
@@ -77,7 +79,7 @@ public class G3_01600_말이_되고픈_원숭이 {
 	}
 	
 	static class Reader {
-		final int SIZE = 1 << 15;
+		final int SIZE = 1 << 13;
 		byte[] buffer = new byte[SIZE];
 		int idx, size;
 
