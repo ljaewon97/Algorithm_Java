@@ -3,7 +3,6 @@ package swea;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.StringTokenizer;
@@ -30,8 +29,6 @@ public class SWEA_연습문제_15170_낚시터_자리잡기 {
 				gateInfo[i][0] = Integer.parseInt(st.nextToken()) - 1;
 				gateInfo[i][1] = Integer.parseInt(st.nextToken());
 			}
-		
-			//enter(2);
 			
 			for(int i = 0; i < 6; i++) {
 				enter(i);
@@ -51,7 +48,6 @@ public class SWEA_연습문제_15170_낚시터_자리잡기 {
 	static void recur(int c, int o, int d) {
 		if(o == 3) {
 			ans = Math.min(ans, d);
-			System.out.println(Arrays.toString(visited));
 			return;
 		}
 		
@@ -66,6 +62,13 @@ public class SWEA_연습문제_15170_낚시터_자리잡기 {
 			route.add(gate);
 			dist++;
 			cnt++;
+			
+			if(cnt == people) {
+				recur(c, o+1, d+dist);
+				visited[gate] = false;
+				
+				return;
+			}
 		}
 	
 		int step = 1;
@@ -73,10 +76,6 @@ public class SWEA_연습문제_15170_낚시터_자리잡기 {
 		while(true) {
 			int left = gate - step;
 			int right = gate + step;
-			
-			if(o == 1) {
-				System.out.printf("%d %d %d %d\n", left, right, cnt, people);
-			}
 			
 			if(!isIn(left) && !isIn(right)) break;
 			
@@ -93,11 +92,6 @@ public class SWEA_연습문제_15170_낚시터_자리잡기 {
 					dist += step + 1;
 					cnt++;
 					
-					while(!route.isEmpty()) {
-						int x = route.poll();
-						visited[x] = false;
-					}
-					
 					visited[left] = true;
 					recur(c, o+1, d+dist);
 					visited[left] = false;
@@ -105,7 +99,11 @@ public class SWEA_연습문제_15170_낚시터_자리잡기 {
 					recur(c, o+1, d+dist);
 					visited[right] = false;
 					
-					break;
+					while(!route.isEmpty()) {
+						visited[route.poll()] = false;
+					}
+					
+					return;
 				}
 			}
 			else if(isIn(left) && !visited[left]) {
@@ -122,13 +120,13 @@ public class SWEA_연습문제_15170_낚시터_자리잡기 {
 			}
 			
 			if(cnt == people) {
-//				while(!route.isEmpty()) {
-//					int x = route.poll();
-//					visited[x] = false;
-//				}
-				
 				recur(c, o+1, d+dist);
-				break;
+				
+				while(!route.isEmpty()) {
+					visited[route.poll()] = false;
+				}
+				
+				return;
 			}
 			
 			step++;
