@@ -34,7 +34,19 @@ public class G4_01504_특정한_최단_경로 {
 		int v2 = in.nextInt();
 		
 		long[] dist1 = dijkstra(1);
+		
+		if(dist1[N] == INF) {
+			System.out.println(-1);
+			return;
+		}
+		
 		long[] distv1 = dijkstra(v1);
+		
+		if(distv1[v2] == INF) {
+			System.out.println(-1);
+			return;
+		}
+		
 		long[] distv2 = dijkstra(v2);
 		
 		long case1 = (dist1[v1] == INF || distv1[v2] == INF || distv2[N] == INF) ? INF : dist1[v1] + distv1[v2] + distv2[N];
