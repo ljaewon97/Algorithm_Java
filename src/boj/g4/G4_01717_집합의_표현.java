@@ -6,18 +6,57 @@ public class G4_01717_집합의_표현 {
 	static int N, M;
 	
 	public static void main(String[] args) throws Exception {
+		StringBuilder sb = new StringBuilder();
+		
 		N = in.nextInt();
 		M = in.nextInt();
 		
 		parent = new int[N+1];
 		depth = new int[N+1];
 		
-		for(int i = 1; i <= N; i++) {
+		for(int i = 0; i <= N; i++) {
 			parent[i] = i;
 			depth[i] = 1;
 		}
 		
+		for(int i = 0; i < M; i++) {
+			int cmd = in.nextInt();
+			int a = in.nextInt();
+			int b = in.nextInt();
+			
+			if(cmd == 0) {
+				union(a, b);
+			}
+			else {
+				int pa = find(a);
+				int pb = find(b);
+				
+				sb.append(pa == pb ? "YES" : "NO").append("\n");
+			}
+		}
 		
+		System.out.println(sb);
+	}
+	
+	static int find(int node) {
+		if(parent[node] == node) return node;
+		return parent[node] = find(parent[node]);
+	}
+	
+	static void union(int n1, int n2) {
+		int p1 = find(n1);
+		int p2 = find(n2);
+		
+		if(p1 == p2) return;
+		
+		if(depth[p1] < depth[p2]) {
+			parent[p1] = p2;
+			depth[p2] += depth[p1];
+		}
+		else {
+			parent[p2] = p1;
+			depth[p1] += depth[p2];
+		}
 	}
 	
 	static class Reader {
