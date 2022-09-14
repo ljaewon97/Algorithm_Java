@@ -1,5 +1,6 @@
 package swea.swea11707;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -86,7 +87,6 @@ class Solution {
 	}
 	
 	public static void main(String[] args) throws Exception {
-		
 		int test, T;
 		int wordCnt;
 		
@@ -222,6 +222,11 @@ class UserSolution {
 					mstrcpy(correctWord[i], correct[i]);
 				}
 			}
+			
+			for(char[] row: correct) {
+				System.out.println(Arrays.toString(row));
+			}
+			
 			return cnt;
 		}
 		else if(!searchHistory.containsKey(mId) || searchTimestamp - searchHistory.get(mId).searchTimestamp > 10) {
@@ -329,6 +334,8 @@ class UserSolution {
 				}
 			}
 		}
+		
+		System.out.println(searchTimestamp + " " + tempDB + " " + DB.size());
 		
 		return 0;
 	}
