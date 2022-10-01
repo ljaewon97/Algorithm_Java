@@ -78,42 +78,38 @@ public class G1_18809_Gaaaaaaaaaarden {
 	}
 	
 	static void bfs() {
-		Queue<int[]> queue = new LinkedList<>();
+		Queue<Node> queue = new LinkedList<>();
 		visited = new int[N][M];
 		int flower = 0;
 		
 		// 0: red, 1: green
 		for(int i = 0; i < S; i++) {
 			if(reds[i]) {
-				queue.add(new int[] {result[i].r, result[i].c, 1, 0});
+				queue.add(new Node(result[i].r, result[i].c, 1));
 				visited[result[i].r][result[i].c] = 1;
 			}
 			else {
-				queue.add(new int[] {result[i].r, result[i].c, D+1, 0});
+				queue.add(new Node(result[i].r, result[i].c, D+1));
 				visited[result[i].r][result[i].c] = D+1;
 			}
 		}
 		
 		while(!queue.isEmpty()) {
-			int[] cur = queue.poll();
-			int r = cur[0];
-			int c = cur[1];
-			int d = cur[2];
-			int color = cur[3];
+			Node cur = queue.poll();
 			
-			if(visited[r][c] == 2000000) continue;
+			if(visited[cur.r][cur.c] == 2000000) continue;
 			
 			for(int i = 0; i < 4; i++) {
-				int nr = r + dr[i];
-				int nc = c + dc[i];
+				int nr = cur.r + dr[i];
+				int nc = cur.c + dc[i];
 				
 				if(!isIn(nr, nc)) continue;
 				
 				if(visited[nr][nc] == 0 && map[nr][nc] != 0) {
-					visited[nr][nc] = d + 1;
-					queue.add(new int[] {nr, nc, d+1, color});
+					visited[nr][nc] = cur.d + 1;
+					queue.add(new Node(nr, nc, cur.d+1));
 				}
-				else if(d - visited[nr][nc] == D-1 || visited[nr][nc] - d == D+1) {
+				else if(cur.d - visited[nr][nc] == D-1 || visited[nr][nc] - cur.d == D+1) {
 					flower++;
 					visited[nr][nc] = 2000000;
 				}
@@ -135,5 +131,17 @@ class Point {
 	public Point(int r, int c) {
 		this.r = r;
 		this.c = c;
+	}
+}
+
+class Node {
+	int r;
+	int c;
+	int d;
+	
+	public Node(int r, int c, int d) {
+		this.r = r;
+		this.c = c;
+		this.d = d;
 	}
 }
