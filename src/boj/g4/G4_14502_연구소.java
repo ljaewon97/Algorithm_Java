@@ -11,7 +11,7 @@ public class G4_14502_연구소 {
 	static int[][] map;
 	static boolean[][] visited;
 	static List<Point> viruses = new ArrayList<>();
-	static Point[] cands, result;
+	static Point[] cands;
 	static int N, M, ans, cnt, temp;
 	static int[] dr = {-1,1,0,0};
 	static int[] dc = {0,0,-1,1};
@@ -24,7 +24,6 @@ public class G4_14502_연구소 {
 		
 		map = new int[N][M];
 		cands = new Point[N*M];
-		result = new Point[3];
 		
 		for(int i = 0; i < N; i++) {
 			st = new StringTokenizer(br.readLine());
@@ -59,18 +58,10 @@ public class G4_14502_연구소 {
 		if(nth == 3) {
 			temp = 0;
 			
-			for(Point p: result) {
-				map[p.r][p.c] = 1;
-			}
-			
 			visited = new boolean[N][M];
 			
 			for(Point p: viruses) {
 				dfs(p.r, p.c);
-			}
-			
-			for(Point p: result) {
-				map[p.r][p.c] = 0;
 			}
 			
 			ans = Math.max(ans, cnt-3-temp);
@@ -78,8 +69,9 @@ public class G4_14502_연구소 {
 		}
 		
 		for(int i = start; i < cnt; i++) {
-			result[nth] = cands[i];
+			map[cands[i].r][cands[i].c] = 1;
 			solve(nth+1, i+1);
+			map[cands[i].r][cands[i].c] = 0;
 		}
 	}
 	
