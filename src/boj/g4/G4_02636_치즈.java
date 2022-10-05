@@ -5,8 +5,8 @@ import java.util.Queue;
 
 public class G4_02636_치즈 {
 	static Reader in = new Reader();
-	static Queue<int[]> queue = new LinkedList<>();
-	static Queue<int[]> pend = new LinkedList<>();
+	static Queue<Point> queue = new LinkedList<>();
+	static Queue<Point> pend = new LinkedList<>();
 	static int[][] map, corners;
 	static boolean[][] visited;
 	static int R, C;
@@ -22,7 +22,7 @@ public class G4_02636_치즈 {
 		corners = new int[][] {{0,0},{0,C-1},{R-1,0},{R-1,C-1}};
 		
 		for(int[] corner: corners) {
-			queue.add(new int[] {corner[0], corner[1]});
+			queue.add(new Point(corner[0], corner[1]));
 			visited[corner[0]][corner[1]] = true;
 		}
 		
@@ -53,23 +53,21 @@ public class G4_02636_치즈 {
 		int cnt = 0;
 	
 		while(!queue.isEmpty()) {
-			int[] cur = queue.poll();
-			int r = cur[0];
-			int c = cur[1];
+			Point cur = queue.poll();
 			
 			for(int i = 0; i < 4; i++) {
-				int nr = r + dr[i];
-				int nc = c + dc[i];
+				int nr = cur.r + dr[i];
+				int nc = cur.c + dc[i];
 				
 				if(!isIn(nr, nc)) continue;
 				
 				if(!visited[nr][nc] && map[nr][nc] == 0) {
 					visited[nr][nc] = true;
-					queue.add(new int[] {nr, nc});
+					queue.add(new Point(nr, nc));
 				}
 				else if(!visited[nr][nc] && map[nr][nc] == 1) {
 					visited[nr][nc] = true;
-					pend.add(new int[] {nr, nc});
+					pend.add(new Point(nr, nc));
 					cnt++;
 				}
 			}
@@ -80,15 +78,24 @@ public class G4_02636_치즈 {
 	
 	static void melt() {
 		while(!pend.isEmpty()) {
-			int[] cur = pend.poll();
+			Point cur = pend.poll();
 			
-			map[cur[0]][cur[1]] = 0;
+			map[cur.r][cur.c] = 0;
 			queue.add(cur);
 		}
 	}
 	
 	static boolean isIn(int r, int c) {
 		return 0 <= r && r < R && 0 <= c && c < C;
+	}
+	
+	static class Point {
+		int r, c;
+		
+		public Point(int r, int c) {
+			this.r = r;
+			this.c = c;
+		}
 	}
 	
 	static class Reader {
@@ -99,16 +106,9 @@ public class G4_02636_치즈 {
 		int nextInt() throws Exception {
 			int n = 0;
 			byte c;
-			while ((c = read()) <= 32)
-				;
-			boolean neg = c == '-' ? true : false;
-			if (neg)
-				c = read();
-			do
-				n = (n << 3) + (n << 1) + (c & 15);
+			while ((c = read()) <= 32);
+			do n = (n << 3) + (n << 1) + (c & 15);
 			while (isNumber(c = read()));
-			if (neg)
-				return -n;
 			return n;
 		}
 
