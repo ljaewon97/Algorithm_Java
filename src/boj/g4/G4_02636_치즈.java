@@ -22,7 +22,7 @@ public class G4_02636_치즈 {
 		corners = new int[][] {{0,0},{0,C-1},{R-1,0},{R-1,C-1}};
 		
 		for(int[] corner: corners) {
-			queue.add(new Point(corner[0], corner[1]));
+			pend.add(new Point(corner[0], corner[1]));
 			visited[corner[0]][corner[1]] = true;
 		}
 		
@@ -37,7 +37,6 @@ public class G4_02636_치즈 {
 		
 		while(true) {
 			int cnt = find();
-			melt();
 			
 			if(cnt == 0) break;
 			
@@ -51,6 +50,9 @@ public class G4_02636_치즈 {
 	
 	static int find() {
 		int cnt = 0;
+		Queue<Point> swap = queue;
+		queue = pend;
+		pend = swap;
 	
 		while(!queue.isEmpty()) {
 			Point cur = queue.poll();
@@ -59,14 +61,15 @@ public class G4_02636_치즈 {
 				int nr = cur.r + dr[i];
 				int nc = cur.c + dc[i];
 				
-				if(!isIn(nr, nc)) continue;
+				if(!isIn(nr, nc) || visited[nr][nc]) continue;
 				
-				if(!visited[nr][nc] && map[nr][nc] == 0) {
+				if(map[nr][nc] == 0) {
 					visited[nr][nc] = true;
 					queue.add(new Point(nr, nc));
 				}
-				else if(!visited[nr][nc] && map[nr][nc] == 1) {
+				else if(map[nr][nc] == 1) {
 					visited[nr][nc] = true;
+					map[nr][nc] = 0;
 					pend.add(new Point(nr, nc));
 					cnt++;
 				}
@@ -74,15 +77,6 @@ public class G4_02636_치즈 {
 		}
 		
 		return cnt;
-	}
-	
-	static void melt() {
-		while(!pend.isEmpty()) {
-			Point cur = pend.poll();
-			
-			map[cur.r][cur.c] = 0;
-			queue.add(cur);
-		}
 	}
 	
 	static boolean isIn(int r, int c) {
