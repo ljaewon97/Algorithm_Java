@@ -1,11 +1,11 @@
 package boj.s1;
 
-import java.util.Deque;
 import java.util.LinkedList;
+import java.util.Queue;
 
 public class S1_09205_맥주_마시면서_걸어가기 {
 	static Reader in = new Reader();
-	static int[][] map;
+	static Point[] map;
 	static boolean[] visited;
 	static int N;
 	
@@ -14,45 +14,37 @@ public class S1_09205_맥주_마시면서_걸어가기 {
 		
 		int T = in.nextInt();
 		
-		for(int t = 0; t < T; t++) {
+		while(T-- > 0) {
 			N = in.nextInt();
 			
-			map = new int[N+2][2];
+			map = new Point[N+2];
 			visited = new boolean[N+2];
 			
 			for(int i = 0; i < N+2; i++) {
-				map[i][0] = in.nextInt();
-				map[i][1] = in.nextInt();
-
+				map[i] = new Point(in.nextInt(), in.nextInt());
 			}
 			
-			if(bfs()) {
-				sb.append("happy\n");
-			}
-			else {
-				sb.append("sad\n");
-			}
+			if(bfs()) sb.append("happy\n");
+			else sb.append("sad\n");
 		}
 		
 		System.out.println(sb);
 	}
 	
 	static boolean bfs() {
-		Deque<Integer> deque = new LinkedList<>();
-		deque.add(0);
+		Queue<Integer> queue = new LinkedList<>();
+		queue.add(0);
 		visited[0] = true;
 		
-		while(!deque.isEmpty()) {
-			int cur = deque.poll();
+		while(!queue.isEmpty()) {
+			int cur = queue.poll();
 			
-			if(cur == N+1) {
-				return true;
-			}
+			if(cur == N+1) return true;
 			
-			for(int i = 0; i < N+2; i++) {
-				if(!visited[i] && calcDist(cur, i) <= 1000) {
+			for(int i = 1; i < N+2; i++) {
+				if(!visited[i] && canMove(cur, i)) {
 					visited[i] = true;
-					deque.add(i);
+					queue.add(i);
 				}
 			}
 		}
@@ -60,8 +52,17 @@ public class S1_09205_맥주_마시면서_걸어가기 {
 		return false;
 	}
 	
-	static int calcDist(int c1, int c2) {
-		return Math.abs(map[c1][0] - map[c2][0]) + Math.abs(map[c1][1] - map[c2][1]);
+	static boolean canMove(int c1, int c2) {
+		return Math.abs(map[c1].x - map[c2].x) + Math.abs(map[c1].y - map[c2].y) <= 1000;
+	}
+	
+	static class Point {
+		int x, y;
+		
+		public Point(int x, int y) {
+			this.x = x;
+			this.y = y;
+		}
 	}
 	
 	static class Reader {
