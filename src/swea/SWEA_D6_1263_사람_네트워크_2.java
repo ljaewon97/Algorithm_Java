@@ -19,22 +19,18 @@ public class SWEA_D6_1263_사람_네트워크_2 {
 			int N = Integer.parseInt(st.nextToken());
 			
 			int[][] graph = new int[N][N];
-			int[][] dp = new int[N][N];
 			
 			for(int i = 0; i < N; i++) {
 				for(int j = 0; j < N; j++) {
 					graph[i][j] = st.nextToken().charAt(0) - '0';
-					if(i == j) dp[i][j] = 0;
-					else dp[i][j] = graph[i][j] == 0 ? INF : graph[i][j];
+					if(i != j && graph[i][j] == 0)  graph[i][j] =  INF;
 				}
 			}
 			
 			for(int k = 0; k < N; k++) {
 				for(int i = 0; i < N; i++) {
-					if(i == k) continue;
 					for(int j = 0; j < N; j++) {
-						if(i == j || j == k) continue;
-						dp[i][j] = Math.min(dp[i][k] + dp[k][j], dp[i][j]);
+						graph[i][j] = Math.min(graph[i][k] + graph[k][j], graph[i][j]);
 					}
 				}
 			}
@@ -45,7 +41,7 @@ public class SWEA_D6_1263_사람_네트워크_2 {
 				int temp = 0;
 				
 				for(int j = 0; j < N; j++) {
-					temp += dp[i][j];
+					temp += graph[i][j];
 				}
 				
 				ans = Math.min(ans, temp);
