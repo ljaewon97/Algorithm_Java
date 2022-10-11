@@ -35,16 +35,10 @@ public class G4_02458_키_순서 {
 		int ans = 0;
 		
 		for(int i = 1; i <= N; i++) {
-			boolean[] check = new boolean[N+1];
 			boolean flag = true;
 			
 			for(int j = 1; j <= N; j++) {
-				if(graph[i][j] != INF) check[j] = true;
-				if(graph[j][i] != INF) check[j] = true;
-			}
-			
-			for(int j = 1; j <= N; j++) {
-				if(!check[j]) {
+				if(graph[i][j] == INF && graph[j][i] == INF) {
 					flag = false;
 					break;
 				}
