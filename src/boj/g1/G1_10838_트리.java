@@ -11,7 +11,7 @@ public class G1_10838_트리 {
 		StringBuilder sb = new StringBuilder();
 		
 		int N = in.nextInt();
-		int K = in.nextInt();
+		int K = in.nextInt() + 1;
 		
 		parent = new int[N];
 		visited = new int[N];
@@ -19,7 +19,7 @@ public class G1_10838_트리 {
 		
 		parent[0] = -1;
 		
-		while(K-- > 0) {
+		while(K-- > 1) {
 			int r = in.nextInt();
 			
 			if(r == 1) {
@@ -27,25 +27,23 @@ public class G1_10838_트리 {
 				int b = in.nextInt();
 				int c = in.nextInt();
 				
-				paint(a, b, c);
+				paint(a, b, c, K);
 			}
 			else {
 				int a = in.nextInt();
 				int b = in.nextInt();
 				
-				if(r == 2) move(a, b);
-				else sb.append(count(a, b)).append("\n");
+				if(r == 2) parent[a] = b;
+				else sb.append(count(a, b, K)).append("\n");
 			}
 		}
 		
 		System.out.println(sb);
-		
-		System.out.println(lca(3, 5));
 	}
 
-	static void paint(int a, int b, int c) {
+	static void paint(int a, int b, int c, int k) {
 		if(a == b) return;
-		int p = lca(a, b);
+		int p = lca(a, b, k);
 		
 		while(a != p) {
 			color[a] = c;
@@ -58,15 +56,10 @@ public class G1_10838_트리 {
 		}
 	}
 	
-	static void move(int a, int b) {
-		if(a == b) return;
-		parent[a] = b;
-	}
-	
-	static int count(int a, int b) {
+	static int count(int a, int b, int k) {
 		if(a == b) return 0;
 		Set<Integer> set = new HashSet<>();
-		int p = lca(a, b);
+		int p = lca(a, b, k);
 		
 		while(a != p) {
 			set.add(color[a]);
@@ -81,30 +74,28 @@ public class G1_10838_트리 {
 		return set.size();
 	}
 	
-	static int lca(int a, int b) {
+	static int lca(int a, int b, int k) {
 		if(a == b) return a;
 		
-		visited[a] = a;
-		visited[b] = b;
-		int pa = parent[a];
-		int pb = parent[b];
+		visited[a] = k;
 		
 		int cnt = 0;
-		while(pa != -1 && cnt < 1001) {
-			visited[pa] = a;
-			pa = parent[pa];
+		while(parent[a] != -1 && cnt < 1001) {
+			a = parent[a];
+			visited[a] = k;
 			cnt++;
 		}
+		
+		if(visited[b] == k) return b;
 		
 		cnt = 0;
-		while(pb != -1 && cnt < 1001) {
-			if(visited[pb] == a) return pb;
-			
-			pb = parent[pb];
+		while(parent[b] != -1 && cnt < 1001) {
+			b = parent[b];
+			if(visited[b] == k) break;
 			cnt++;
 		}
 		
-		return 0;
+		return b;
 	}
 	
 	static class Reader {
