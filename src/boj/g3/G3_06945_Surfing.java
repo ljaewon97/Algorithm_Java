@@ -1,4 +1,4 @@
-package boj.unknown;
+package boj.g3;
 
 import java.io.BufferedReader;
 import java.io.IOException;
