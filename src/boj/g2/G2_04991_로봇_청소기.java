@@ -30,7 +30,7 @@ public class G2_04991_로봇_청소기 {
 			M = Integer.parseInt(st.nextToken());
 			N = Integer.parseInt(st.nextToken());
 			
-			if(N == 0 && M == 0) break;
+			if(N+M == 0) break;
 			
 			map = new char[N][M];
 			
