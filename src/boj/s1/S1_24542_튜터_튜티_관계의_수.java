@@ -4,7 +4,6 @@ public class S1_24542_튜터_튜티_관계의_수 {
 	static Reader in = new Reader();
 	static int[] parent, depth;
 	static int N, M;
-	static long cnt;
 	
 	public static void main(String[] args) throws Exception {
 		N = in.nextInt();
