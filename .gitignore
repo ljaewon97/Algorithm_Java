@@ -1,6 +1,8 @@
 # Created by https://www.toptal.com/developers/gitignore/api/eclipse,maven
 # Edit at https://www.toptal.com/developers/gitignore?templates=eclipse,maven
 
+.idea/
+
 ### Eclipse ###
 .metadata
 bin/
