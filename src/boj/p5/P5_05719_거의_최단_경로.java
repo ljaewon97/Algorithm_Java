@@ -2,15 +2,18 @@ package boj.p5;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
+import java.util.Queue;
 
 public class P5_05719_거의_최단_경로 {
 	static Reader in = new Reader();
 	static List<Road>[] graph;
+	static List<Road>[] graphR;
 	static boolean[][] blocked;
-	static boolean[] visited;
-	static int N, M, S, D, shortest;
+	static int[] dist;
+	static int N, M, S, D;
 	
 	public static void main(String[] args) throws Exception {
 		StringBuilder sb = new StringBuilder();
@@ -25,11 +28,12 @@ public class P5_05719_거의_최단_경로 {
 			D = in.nextInt();
 			
 			graph = new ArrayList[N];
+			graphR = new ArrayList[N];
 			blocked = new boolean[N][N];
-			visited = new boolean[N];
 			
 			for(int i = 0; i < N; i++) {
 				graph[i] = new ArrayList<>();
+				graphR[i] = new ArrayList<>();
 			}
 			
 			while(M-- > 0) {
@@ -38,12 +42,12 @@ public class P5_05719_거의_최단_경로 {
 				int P = in.nextInt();
 				
 				graph[U].add(new Road(V, P));
+				graphR[V].add(new Road(U, P));
 			}
 			
-			shortest = dijkstra();
+			dijkstra();
 			
-			visited[S] = true;
-			dfs(S, -1, 0);
+			bfs();
 			
 			sb.append(dijkstra2()).append("\n");
 		}
@@ -52,7 +56,7 @@ public class P5_05719_거의_최단_경로 {
 	}
 	
 	static int dijkstra2() {
-		int[] dist = new int[N];
+		dist = new int[N];
 		
 		Arrays.fill(dist, Integer.MAX_VALUE);
 		
@@ -78,32 +82,24 @@ public class P5_05719_거의_최단_경로 {
 		return dist[D] == Integer.MAX_VALUE ? -1 : dist[D];
 	}
 	
-	static boolean dfs(int cur, int prev, int dist) {
-		if(dist > shortest) return false;
+	static void bfs() {
+		Queue<Integer> queue = new LinkedList<>();
+		queue.add(D);
 		
-		if(cur == D && dist == shortest) {
-			if(prev != -1) blocked[prev][cur] = true;
-			return true;
-		}
-		
-		boolean flag = false;
-		
-		for(Road next: graph[cur]) {
-			if(!visited[next.v]) {
-				visited[next.v] = true;
-				if(dfs(next.v, cur, dist+next.d)) {
-					if(prev != -1) blocked[prev][cur] = true;
-					flag = true;
+		while(!queue.isEmpty()) {
+			int node = queue.poll();
+			
+			for(Road prev: graphR[node]) {
+				if(dist[prev.v] + prev.d == dist[node] && !blocked[prev.v][node]) {
+					queue.add(prev.v);
+					blocked[prev.v][node] = true;
 				}
-				visited[next.v] = false;
 			}
 		}
-		
-		return flag;
 	}
 	
-	static int dijkstra() {
-		int[] dist = new int[N];
+	static void dijkstra() {
+		dist = new int[N];
 		
 		Arrays.fill(dist, Integer.MAX_VALUE);
 		
@@ -124,8 +120,6 @@ public class P5_05719_거의_최단_경로 {
 				}
 			}
 		}
-		
-		return dist[D];
 	}
 	
 	static class Road implements Comparable<Road> {
