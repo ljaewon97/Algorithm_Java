@@ -1,0 +1,122 @@
+package boj.p5;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class P5_08012_한동이는_영업사원 {
+	static Reader in = new Reader();
+	static List<Integer>[] graph;
+	static int[][] parent, dist;
+	static int[] depth;
+	static int N, M, L;
+	
+	public static void main(String[] args) throws Exception {
+		N = in.nextInt();
+		L = (int) Math.ceil(Math.log(N) / Math.log(2));
+		
+		graph = new ArrayList[N+1];
+		parent = new int[N+1][L+1];
+		dist = new int[N+1][L+1];
+		depth = new int[N+1];
+		
+		for(int i = 1; i <= N; i++) {
+			graph[i] = new ArrayList<>();
+		}
+		
+		for(int i = 0; i < N-1; i++) {
+			int a = in.nextInt();
+			int b = in.nextInt();
+			
+			graph[a].add(b);
+			graph[b].add(a);
+		}
+		
+		dfs(1, 1);
+		
+		for(int i = 1; i <= L; i++) {
+			for(int j = 1; j <= N; j++) {
+				parent[j][i] = parent[parent[j][i-1]][i-1];
+				dist[j][i] = dist[j][i-1] + dist[parent[j][i-1]][i-1];
+			}
+		}
+		
+		M = in.nextInt();
+		int prev = in.nextInt();
+		long ans = 0;
+		
+		while(M-- > 1) {
+			int cur = in.nextInt();
+			ans += lca(prev, cur);
+			prev = cur;
+		}
+		
+		System.out.println(ans);
+	}
+	
+	static void dfs(int cur, int dep) {
+		depth[cur] = dep;
+		
+		for(int next: graph[cur]) {
+			if(depth[next] == 0) {
+				parent[next][0] = cur;
+				dist[next][0] = 1;
+				dfs(next, dep+1);
+			}
+		}
+	}
+	
+	static int lca(int a, int b) {
+		if(depth[b] > depth[a]) return lca(b, a);
+		
+		int ret = 0;
+		
+		if(depth[a] != depth[b]) {
+			for(int i = L; i >= 0; i--) {
+				if(depth[a] >= depth[b] + (1<<i)) {
+					ret += dist[a][i];
+					a = parent[a][i];
+				}
+			}
+		}
+		
+		if(a == b) return ret;
+		
+		for(int i = L; i >= 0; i--) {
+			if(parent[a][i] != parent[b][i]) {
+				ret += dist[a][i] + dist[b][i];
+				a = parent[a][i];
+				b = parent[b][i];
+			}
+		}
+		
+		return ret + dist[a][0] + dist[b][0];
+	}
+	
+	static class Reader {
+		final int SIZE = 1 << 13;
+		byte[] buffer = new byte[SIZE];
+		int index, size;
+
+		int nextInt() throws Exception {
+			int n = 0;
+			byte c;
+			while ((c = read()) <= 32);
+			do n = (n << 3) + (n << 1) + (c & 15);
+			while (isNumber(c = read()));
+			return n;
+		}
+
+		boolean isNumber(byte c) {
+			return 47 < c && c < 58;
+		}
+
+		byte read() throws Exception {
+			if (index == size) {
+				size = System.in.read(buffer, index = 0, SIZE);
+				if (size < 0)
+					buffer[0] = -1;
+			}
+			return buffer[index++];
+		}
+	}
+}
