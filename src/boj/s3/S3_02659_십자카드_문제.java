@@ -4,15 +4,16 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
 public class S3_02659_십자카드_문제 {
-	static PriorityQueue<Integer> pq = new PriorityQueue<>();
-	static List<Integer> list = new ArrayList<>();
+	static boolean[] exist = new boolean[10000];
+	static List<Integer> cross = new ArrayList<>();
 	static int[] num = {1,2,3,4,5,6,7,8,9};
 	static int[] result = new int[4];
+	static int no;
 	
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -20,11 +21,15 @@ public class S3_02659_십자카드_문제 {
 		
 		solve(0);
 		
+		Collections.sort(cross);
+		
 		int[] nums = new int[4];
 		
 		for(int i = 0; i < 4; i++) {
 			nums[i] = Integer.parseInt(st.nextToken());
 		}
+		
+		int t = 10000;
 		
 		for(int i = 0; i < 4; i++) {
 			int x = 0;
@@ -33,14 +38,12 @@ public class S3_02659_십자카드_문제 {
 				x = x*10 + nums[(i+j)%4];
 			}
 			
-			pq.add(x);
+			t = Math.min(t, x);
 		}
 		
-		int t = pq.poll();
-		
-		for(int i = 1; i <= list.size(); i++) {
-			if(list.get(i) == t) {
-				System.out.println(i);
+		for(int i = 0; i < cross.size(); i++) {
+			if(cross.get(i) == t) {
+				System.out.println(i+1);
 				return;
 			}
 		}
@@ -48,6 +51,8 @@ public class S3_02659_십자카드_문제 {
 	
 	static void solve(int nth) {
 		if(nth == 4) {
+			int min = 10000;
+			
 			for(int i = 0; i < 4; i++) {
 				int x = 0;
 				
@@ -55,11 +60,14 @@ public class S3_02659_십자카드_문제 {
 					x = x*10 + result[(i+j)%4];
 				}
 				
-				pq.add(x);
+				min = Math.min(min, x);
 			}
 			
-			list.add(pq.poll());
-			pq.clear();
+			if(!exist[min]) {
+				cross.add(min);
+				exist[min] = true;
+			}
+			
 			return;
 		}
 		
