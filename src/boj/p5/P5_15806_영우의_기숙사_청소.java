@@ -1,6 +1,5 @@
 package boj.p5;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -8,7 +7,7 @@ public class P5_15806_영우의_기숙사_청소 {
 	static Reader in = new Reader();
 	static Queue<Point> queue = new LinkedList<>();
 	static boolean[][] inspect;
-	static int[][] map;
+	static boolean[][][] map;
 	static int N, M, K, t;
 	static int[] dr = {-1,-2,-2,-1,1,2,2,1};
 	static int[] dc = {-2,-1,1,2,2,1,-1,-2};
@@ -19,19 +18,20 @@ public class P5_15806_영우의_기숙사_청소 {
 		K = in.nextInt();
 		t = in.nextInt();
 		
-		inspect = new boolean[N][N];
-		map = new int[N][N];
-		
-		for(int i = 0; i < N; i++) {
-			Arrays.fill(map[i], -1);
+		if(N == M && M == K && K == 1) {
+			System.out.println("NO");
+			return;
 		}
+		
+		inspect = new boolean[N][N];
+		map = new boolean[N][N][2];
 		
 		while(M-- > 0) {
 			int r = in.nextInt()-1;
 			int c = in.nextInt()-1;
 			
 			queue.add(new Point(r, c, 0));
-			map[r][c] = 0;
+			map[r][c][0] = true;
 		}
 		
 		while(K-- > 0) {
@@ -41,11 +41,29 @@ public class P5_15806_영우의_기숙사_청소 {
 			inspect[r][c] = true;
 		}
 		
-		bfs();
+		while(!queue.isEmpty()) {
+			Point p = queue.poll();
+			
+			if(p.d == t) continue;
+			
+			int nd = p.d+1;
+			
+			for(int i = 0; i < 8; i++) {
+				int nr = p.r + dr[i];
+				int nc = p.c + dc[i];
+				
+				if(!isIn(nr, nc) || map[nr][nc][nd&1]) continue;
+				
+				queue.add(new Point(nr, nc, nd));
+				map[nr][nc][nd&1] = true;
+			}
+		}
+		
+		t &= 1;
 		
 		for(int r = 0; r < N; r++) {
 			for(int c = 0; c < N; c++) {
-				if(inspect[r][c] && map[r][c] == t) {
+				if(inspect[r][c] && map[r][c][t]) {
 					System.out.println("YES");
 					return;
 				}
@@ -53,26 +71,6 @@ public class P5_15806_영우의_기숙사_청소 {
 		}
 		
 		System.out.println("NO");
-	}
-	
-	static void bfs() {
-		while(!queue.isEmpty()) {
-			Point p = queue.poll();
-			
-			if(p.d == t) continue;
-			
-			for(int i = 0; i < 8; i++) {
-				int nr = p.r + dr[i];
-				int nc = p.c + dc[i];
-				
-				if(!isIn(nr, nc)) continue;
-				
-				if(map[nr][nc] != p.d+1) {
-					queue.add(new Point(nr, nc, p.d+1));
-					map[nr][nc] = p.d+1;
-				}
-			}
-		}
 	}
 	
 	static boolean isIn(int r, int c) {
