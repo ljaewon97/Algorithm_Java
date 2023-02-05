@@ -130,15 +130,6 @@ public class P2_10277_JuQueen {
 		}
 	}
 	
-	static class Node {
-		int min, max;
-		
-		public Node(int min, int max) {
-			this.min = min;
-			this.max = max;
-		}
-	}
-	
 	static class Reader {
 		final int SIZE = 1 << 13;
 		byte[] buffer = new byte[SIZE];
