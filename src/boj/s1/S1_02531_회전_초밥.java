@@ -31,9 +31,9 @@ public class S1_02531_회전_초밥 {
 		int max = cnt;
 		
 		for(int i = 0; i < N-1; i++) {
-			max = Math.max(max, cnt+(taken[c]==0?1:0));
 			if(--taken[sushi[i]] == 0) cnt--;
 			if(taken[sushi[i+k]]++ == 0) cnt++;
+			max = Math.max(max, cnt+(taken[c]==0?1:0));
 		}
 		
 		System.out.println(max);
